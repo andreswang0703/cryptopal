@@ -2,7 +2,6 @@ package set1
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 )
 
@@ -14,18 +13,18 @@ func HexToBase64(hexInput string) string {
 	if err != nil {
 		println(err.Error())
 	}
-	fmt.Printf("Byte (decimal): %v\n", bytes)
-	fmt.Printf("Byte (hex):     0x%02x\n", bytes)
+	//fmt.Printf("Byte (decimal): %v\n", bytes)
+	//fmt.Printf("Byte (hex):     0x%02x\n", bytes)
 
-	fmt.Println("grouped into 6 bits")
+	//fmt.Println("grouped into 6 bits")
 	groupOfSixBits := groupBySixBits(bytes)
-	for _, val := range groupOfSixBits {
-		fmt.Printf("%v\n", val)
-	}
-	fmt.Println("grouped into 6 bits")
+	//for _, val := range groupOfSixBits {
+	//	fmt.Printf("%v\n", val)
+	//}
+	//fmt.Println("grouped into 6 bits")
 
 	output := toBase64Str(groupOfSixBits)
-	fmt.Printf("base64 output: %s\n", output)
+	//fmt.Printf("base64 output: %s\n", output)
 
 	return output
 }
