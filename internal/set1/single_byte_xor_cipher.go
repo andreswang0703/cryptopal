@@ -1,7 +1,6 @@
 package set1
 
 import (
-	"fmt"
 	"math"
 	"unicode"
 )
@@ -10,24 +9,26 @@ import (
 // encrypted is the single-byte xor'd text
 // key is the xor character, if this is nil, this function will
 // return a guessed decrypted string based on Englishness (letter freq)
-func Decipher(encrypted string, key *byte) (string, error) {
+// also return the loss (used by challenge #4), and the key used to decipher
+func Decipher(encrypted string, key *rune) (string, float64, rune, error) {
 
 	inputInBytes, err := HexToBytes(encrypted)
 	if err != nil {
-		return "", err
+		return "", -1, *key, err
 	}
 
 	if key != nil {
 		xordBytes := make([]byte, len(inputInBytes))
 		for idx, char := range inputInBytes {
-			xordBytes[idx] = char ^ *key
+			xordBytes[idx] = char ^ byte(*key)
 		}
-		return string(xordBytes), nil
+		return string(xordBytes), 0, *key, nil
 	}
 
 	var result string
 	var minLoss = math.MaxFloat64
 	var freqLoss float64
+	var candidateKey rune
 
 	// trying out each char from ascii as key
 	for i := 0; i <= 255; i++ {
@@ -42,12 +43,13 @@ func Decipher(encrypted string, key *byte) (string, error) {
 
 		if freqLoss < minLoss {
 			minLoss = freqLoss
+			candidateKey = rune(guessKey)
 			result = string(xordBytes)
-			fmt.Printf("with key %s, the deciphered is %s, loss is %f\n", string(guessKey), string(xordBytes), freqLoss)
+			//fmt.Printf("with key %s, the deciphered is %s, loss is %f\n", string(guessKey), string(xordBytes), freqLoss)
 		}
 	}
 
-	return result, nil
+	return result, minLoss, candidateKey, nil
 }
 
 func getDecipheredFreqLoss(deciphered string) float64 {

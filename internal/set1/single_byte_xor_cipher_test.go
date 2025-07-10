@@ -14,7 +14,7 @@ func TestDecipher(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		result, err := Decipher(tt.hexInput, nil)
+		result, _, _, err := Decipher(tt.hexInput, nil)
 		if err != nil {
 			t.Errorf("Decipher(%q) errored out %q; want %q", tt.hexInput, err, tt.expected)
 		}
